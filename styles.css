@@ -62,3 +62,20 @@ body {
 
     display: none;
 }
+
+.timer--warning {
+    background: #a44;
+    color: #fcc;
+}
+
+.game-over {
+    display: none;
+}
+
+.game-over--lose {
+    display: block;
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    padding: 1rem 0;
+    color: #fcc;
+}
