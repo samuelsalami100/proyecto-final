@@ -32,10 +32,33 @@ body {
     background: #555;
     margin-top: 1rem;
     border-radius: 0.2rem;
+
+    font-size: 1.5rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .btn-inicio {
     font-size: 1.2rem;
     padding: 0.5rem 1rem;
     margin-top: 1rem;
+}
+
+.timer {
+    width: 4rem;
+    height: 4rem;
+    background: #acf;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #245;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 1rem;
+
+    display: none;
 }
