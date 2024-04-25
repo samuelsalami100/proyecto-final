@@ -40,11 +40,18 @@ const divPalabras = document.querySelectorAll('.tablero__palabra')
 /** @type {HTMLDivElement} */
 const divGameOver = document.querySelector('.game-over')
 
+/** @type {HTMLDivElement} */
+const divPalabra = document.querySelector('.palabra')
+
 let intervalId = -1
 
+let mostrandoTodas = false
 
 /** @type {string[]} */
 let palabras = []
+
+let secuenciaPalabras = []
+let acertadas = 0
 ////////////////////////////////////////////////////////////////////////////////
 function iniciarJuego() {
     divGameOver.classList.remove('game-over--victory', 'game-over--lose')
@@ -53,6 +60,10 @@ function iniciarJuego() {
     // Desordenar y quedarnos con 9
     coleccionPalabras.sort( () => 0.5 - Math.random() )
     palabras = coleccionPalabras.slice(0, 9)
+
+    secuenciaPalabras = [...palabras]
+    secuenciaPalabras.sort( () => 0.5 - Math.random() )
+
 
     divPalabras.forEach((e, i)=>{
         e.textContent = palabras[i]
@@ -63,19 +74,39 @@ function iniciarJuego() {
 
     let time = 1
     timer.textContent = time
+    mostrandoTodas = true
     intervalId = setInterval(()=>{
         time--
         timer.textContent = time
         if (time == 0) {
             clearInterval(intervalId)
+            mostrandoTodas = false
             ocultarPalabras()
-            iniciarTimer(2)
+            iniciarTimer(30)
         }
     }, 1000)
+
+    divPalabras.forEach((div,i) => {
+        div.addEventListener(
+            'pointerdown', ()=> {
+
+                if (mostrandoTodas) { return }
+
+                alSeleccionarPalabra(div)
+
+            }
+        )
+    })
+}
+
+function ocultarPalabras() {
+    divPalabras.forEach((e,i)=> e.textContent = (i+1))
 }
 
 function iniciarTimer(segundos) {
     clearInterval(intervalId) // por precaución
+
+    siguientePalabra()
     
     timer.classList.remove('timer--warning')
     timer.textContent = segundos
@@ -96,6 +127,7 @@ function iniciarTimer(segundos) {
 function terminarJuego(victoria) {
     clearInterval(intervalId)
     
+    divPalabra.textContent = ''
     timer.style.display = 'none'
     btnInicio.style.display = 'block'
 
@@ -106,9 +138,35 @@ function terminarJuego(victoria) {
     }
 }
 
-function ocultarPalabras() {
-    divPalabras.forEach((e,i)=> e.textContent = i)
+function siguientePalabra() {
+    const sig = secuenciaPalabras[acertadas]
+    divPalabra.textContent = sig
+    console.log(divPalabra)
 }
+
+/**
+ * @param {number} numero 
+ * @param {HTMLDivElement} div 
+ */
+function alSeleccionarPalabra(div) {
+    const seleccion = +div.textContent - 1
+    const palabra = palabras[seleccion]
+    const objetivo = secuenciaPalabras[acertadas]
+
+    if (palabra == objetivo) {
+        div.textContent = palabra
+        acertadas++
+        if (acertadas == 9) {
+            return
+        }
+    } else {
+        acertadas = 0
+        ocultarPalabras()
+    }
+
+    siguientePalabra()
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 
