@@ -39,6 +39,14 @@ const divPalabras = document.querySelectorAll('.tablero__palabra')
 
 /** @type {HTMLDivElement} */
 const divGameOver = document.querySelector('.game-over')
+/** @type {HTMLDivElement} */
+const gameOverMsg = document.querySelector('.game-over__message')
+
+const sectInstrucciones = document.querySelector('.instrucciones')
+const btnInstrucciones = document.querySelector('.instrucciones__btn')
+btnInstrucciones.addEventListener('pointerdown', ()=>{
+    sectInstrucciones.style.display = 'none'
+})
 
 /** @type {HTMLDivElement} */
 const divPalabra = document.querySelector('.palabra')
@@ -72,7 +80,7 @@ function iniciarJuego() {
     btnInicio.style.display = 'none'
     timer.style.display = 'flex'
 
-    let time = 1
+    let time = 5
     timer.textContent = time
     mostrandoTodas = true
     intervalId = setInterval(()=>{
@@ -89,11 +97,10 @@ function iniciarJuego() {
     divPalabras.forEach((div,i) => {
         div.addEventListener(
             'pointerdown', ()=> {
-
                 if (mostrandoTodas) { return }
+                if (div.textContent.length > 1) { return }
 
                 alSeleccionarPalabra(div)
-
             }
         )
     })
@@ -132,8 +139,10 @@ function terminarJuego(victoria) {
     btnInicio.style.display = 'block'
 
     if (victoria) {
+        gameOverMsg.textContent = "¡Victoria!"
         divGameOver.classList.add('game-over--victory')
     } else {
+        gameOverMsg.textContent = "¡Se acabó el tiempo!"
         divGameOver.classList.add('game-over--lose')
     }
 }
@@ -157,7 +166,7 @@ function alSeleccionarPalabra(div) {
         div.textContent = palabra
         acertadas++
         if (acertadas == 9) {
-            return
+            return terminarJuego(true)
         }
     } else {
         acertadas = 0
@@ -169,8 +178,6 @@ function alSeleccionarPalabra(div) {
 
 
 ////////////////////////////////////////////////////////////////////////////////
-
-
 
 
 btnInicio.addEventListener('pointerdown', () => {
